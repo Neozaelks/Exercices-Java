@@ -1,8 +1,6 @@
 package fr.neozaelks.intro;
 
-import java.sql.SQLOutput;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class AlgoSimple {
   public static void main(String[] args) {
@@ -15,7 +13,10 @@ public class AlgoSimple {
 //    departementDeLaPrefectureDAmiens();
 //    stairwayToHeavenMadeOfStars();
 //    pyramidToHeavenMadeOfStars();
-
+//    pyramideChiantePourRien();
+//    denominations();
+//    plusProcheDe0();
+//    triDeListe();
   }
 
   /**
@@ -193,7 +194,7 @@ public class AlgoSimple {
   }
 
   /**
-   * Demande à l'utilisateur un opérande, un opérateur, et un autre opérande, puis retourne le résultat.
+   * Demande à l'utilisateur un opérande, un opérateur et un autre opérande, puis retourne le résultat.
    */
   public static void calculatriceNulle(){
     Scanner scanner = new Scanner(System.in);
@@ -389,8 +390,142 @@ public class AlgoSimple {
         // L-1 est aussi le nombre d'espaces à mettre de chaque côté des étoiles.
         // Le code, donc :
 
+        for (int i = nombre; i > 0; i--) {
+          // On affiche le nombre d'espaces à gauche
+          for(int j = 0; j < i-1; j++){
+            System.out.print(" ");
+          }
+          // Puis le nombre d'étoiles au centre
+          for(int k = 0; k < (nombre - i)*2+1; k++){
+            System.out.print("*");
+          }
+          // Puis le nombre d'espaces à droite
+          for(int j = 0; j < i-1; j++){
+            System.out.print(" ");
+          }
+          System.out.println();
+        }
+
       } catch (Exception err){
         System.out.println("Une de vos entrées n'est pas un nombre. Merci de n'entrer que des nombres.");
+      }
+    }
+  }
+
+  /**
+   * Demande à l'utilisateur un nombre à virgule, puis lui retourne la séparation de ce nombre par dénomination.
+   */
+  public static void denominations(){
+    Scanner scanner = new Scanner(System.in);
+    double montant;
+
+    // Boucle conditionnelle permettant de vérifier si les entrées sont bien des nombres.
+    boolean isInputLegal = false;
+    while (!isInputLegal){
+      System.out.println("Entrez votre premier nombre :");
+      String premierInput = scanner.nextLine();
+
+      try {
+        montant = Double.parseDouble(premierInput);
+        isInputLegal = true;
+        double[] valeurDenominations = new double[]{
+          500.0, 200.0, 100.0, 50.0, 20.0, 10.0, 5.0, 2.0, 1.0, 0.50, 0.20, 0.10, 0.05, 0.02, 0.01
+        };
+        int[] nombreDenominations = new int[15];
+
+        // Maintenant que les entrées sont vérifiées, on peut lancer la logique :
+        for (int i = 0; i < valeurDenominations.length; i++) {
+          while(montant >= valeurDenominations[i]){
+            nombreDenominations[i]++;
+            montant -= valeurDenominations[i];
+          }
+        }
+
+        for (int i = 0; i < valeurDenominations.length; i++) {
+          if(valeurDenominations[i] >= 5.0){
+            System.out.print("Billet de ");
+          }
+          else{
+            System.out.print("Pièce de ");
+          }
+          System.out.print(valeurDenominations[i] + "€ : " + nombreDenominations[i]);
+          System.out.println();
+        }
+      } catch (Exception err){
+        System.out.println("Une de vos entrées n'est pas un nombre. Merci de n'entrer que des nombres.");
+      }
+    }
+  }
+
+  /**
+   * Demande à l'utilisateur une liste de températures, puis retourne la température la plus proche de 0.
+   */
+  public static void plusProcheDe0(){
+    boolean isInputsLegal = false;
+    boolean isInputsFinished = false;
+    Scanner scanner = new Scanner(System.in);
+    List<String> inputs = new ArrayList<>();
+    List<Double> tempsInput = new ArrayList<>();
+    List<Double> tempsAbsolues = new ArrayList<>();
+    while(!isInputsLegal){
+      while(!isInputsFinished){
+        System.out.println("Entrez une température, ou Q pour quitter.");
+        String res = scanner.nextLine();
+        if(Objects.equals(res, "Q") || Objects.equals(res, "q")){
+          isInputsFinished = true;
+        }
+        else{
+          inputs.add(res);
+        }
+      }
+      try {
+        for (String input : inputs) {
+          tempsInput.add(Double.parseDouble(input));
+          tempsAbsolues.add(Math.abs(Double.parseDouble(input)));
+        }
+        isInputsLegal = true;
+        // Maintenant que l'on sait que les températures sont bien des nombres, on peut lancer la logique.
+        int index = tempsInput.indexOf(Collections.min(tempsAbsolues));
+        System.out.println("La température la plus proche de 0 est " + tempsInput.get(index));
+      }
+      catch (Exception e){
+        System.out.println("L'une de vos entrées n'est pas un nombre. Merci de n'entrer que des nombres.");
+      }
+    }
+  }
+
+  /**
+   * Demande à l'utilisateur une liste de nombres et trie cette liste.
+   */
+  public static void triDeListe(){
+    boolean isInputsLegal = false;
+    boolean isInputsFinished = false;
+    Scanner scanner = new Scanner(System.in);
+    List<String> inputs = new ArrayList<>();
+    List<Integer> listeInteger = new ArrayList<>();
+
+    while(!isInputsLegal){
+      while(!isInputsFinished){
+        System.out.println("Entrez une valeur, ou Q pour quitter.");
+        String res = scanner.nextLine();
+        if(Objects.equals(res, "Q") || Objects.equals(res, "q")){
+          isInputsFinished = true;
+        }
+        else{
+          inputs.add(res);
+        }
+      }
+      try {
+        for (String input : inputs) {
+          listeInteger.add(Integer.parseInt(input));
+        }
+        isInputsLegal = true;
+        // Maintenant que l'on sait que les valeurs sont bien des nombres, on peut lancer la logique.
+        Collections.sort(listeInteger);
+        System.out.println(listeInteger);
+      }
+      catch (Exception e){
+        System.out.println("L'une de vos entrées n'est pas un nombre. Merci de n'entrer que des nombres.");
       }
     }
   }
